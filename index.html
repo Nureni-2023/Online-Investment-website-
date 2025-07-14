@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 420px; /* Max width for mobile-first design */
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0;
+            color: #666;
+            transition: color 0.2s;
+        }
+        .nav-item.active {
+            color: #007bff; /* Primary color for active state */
+        }
+        .nav-item:hover {
+            color: #0056b3;
+        }
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="app" class="container">
+        <!-- Login/Register Page -->
+        <section id="auth-page" class="flex-grow flex items-center justify-center p-4">
+            <div class="w-full bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-center mb-6 text-gray-800">Welcome Back!</h2>
+
+                <!-- Tab Buttons for Login/Register -->
+                <div class="flex mb-6 rounded-lg overflow-hidden border border-gray-200">
+                    <button id="login-tab" class="flex-1 py-3 text-center text-lg font-medium transition-all duration-300 bg-blue-500 text-white rounded-l-lg">Login</button>
+                    <button id="register-tab" class="flex-1 py-3 text-center text-lg font-medium transition-all duration-300 bg-gray-100 text-gray-700 rounded-r-lg">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="login-email" name="email" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="your@example.com" required>
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="login-password" name="password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="********" required>
+                    </div>
+                    <button type="submit" class="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">Login</button>
+                </form>
+
+                <!-- Register Form (hidden by default) -->
+                <form id="register-form" class="space-y-4 hidden">
+                    <div>
+                        <label for="register-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="register-name" name="name" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="John Doe" required>
+                    </div>
+                    <div>
+                        <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="register-email" name="email" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="your@example.com" required>
+                    </div>
+                    <div>
+                        <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="register-password" name="password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="********" required>
+                    </div>
+                    <div>
+                        <label for="register-confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                        <input type="password" id="register-confirm-password" name="confirm_password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="********" required>
+                    </div>
+                    <button type="submit" class="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300">Register</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Content (hidden by default, shown after login) -->
+        <main id="main-content" class="flex-grow p-4 hidden">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="mb-6">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-lg shadow-lg mb-6">
+                    <h3 class="text-lg font-medium mb-2">Wallet Balance</h3>
+                    <p class="text-4xl font-bold">₦<span id="wallet-balance">0.00</span></p>
+                    <div class="flex justify-between mt-6 space-x-2">
+                        <button id="recharge-btn" class="flex-1 py-3 px-4 bg-white text-blue-700 rounded-lg shadow-md hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center text-sm font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            Recharge
+                        </button>
+                        <button id="withdraw-btn" class="flex-1 py-3 px-4 bg-white text-blue-700 rounded-lg shadow-md hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center text-sm font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
+                            </svg>
+                            Withdraw
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Daily Check-in Bonus!</h3>
+                    <p class="text-gray-600 mb-4">Click below to claim your ₦50 bonus.</p>
+                    <button id="checkin-btn" class="w-full py-3 px-4 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 flex items-center justify-center text-lg font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Claim Bonus
+                    </button>
+                </div>
+            </section>
+
+            <!-- Investment Plans Section -->
+            <section id="investment-plans-section" class="mb-6">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Investment Plans</h2>
+                <div id="plans-container" class="grid grid-cols-1 gap-4">
+                    <!-- Plans will be loaded here dynamically by JS -->
+                    <p class="text-gray-500 text-center" id="loading-plans-message">Loading investment plans...</p>
+                </div>
+            </section>
+
+            <!-- My Products Section (hidden by default) -->
+            <section id="my-products-section" class="hidden mb-6">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">My Investments</h2>
+                <div id="my-investments-container" class="space-y-4">
+                    <!-- User's active investments will be loaded here -->
+                    <p class="text-gray-500 text-center" id="loading-my-investments-message">Loading your investments...</p>
+                </div>
+            </section>
+
+            <!-- Profile Section (hidden by default) -->
+            <section id="profile-section" class="hidden mb-6">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Profile</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Name:</label>
+                        <p id="profile-name" class="mt-1 text-gray-900 font-semibold">Loading...</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email:</label>
+                        <p id="profile-email" class="mt-1 text-gray-900 font-semibold">Loading...</p>
+                    </div>
+                    <button id="logout-btn" class="w-full py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 text-lg font-medium">Logout</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Navigation Bar -->
+        <nav id="bottom-nav" class="bg-white border-t border-gray-200 p-2 shadow-lg hidden">
+            <div class="flex justify-around">
+                <a href="#" id="nav-home" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                    <span class="text-xs">Home</span>
+                </a>
+                <a href="#" id="nav-my-products" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.368H6.249a2.25 2.25 0 01-2.247-2.368L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                    <span class="text-xs">My Products</span>
+                </a>
+                <a href="#" id="nav-profile" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0A8.966 8.006 0 0112 21a8.966 8.006 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="text-xs">Profile</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Modals for Recharge and Withdraw -->
+        <div id="recharge-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+                <h3 class="text-xl font-semibold mb-4">Recharge Wallet</h3>
+                <input type="number" id="recharge-amount" class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4" placeholder="Enter amount (e.g., 5000)" min="100">
+                <div class="flex justify-end space-x-2">
+                    <button id="cancel-recharge" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button id="confirm-recharge" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Recharge</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="withdraw-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+                <h3 class="text-xl font-semibold mb-4">Withdraw Funds</h3>
+                <input type="number" id="withdraw-amount" class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4" placeholder="Enter amount (e.g., 2000)" min="100">
+                <input type="text" id="bank-name" class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4" placeholder="Bank Name (e.g., Zenith Bank)">
+                <input type="text" id="account-number" class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4" placeholder="Account Number">
+                <input type="text" id="account-name" class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4" placeholder="Account Name">
+                <div class="flex justify-end space-x-2">
+                    <button id="cancel-withdraw" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button id="confirm-withdraw" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Request Withdrawal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Box for alerts -->
+        <div id="message-box" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden transition-opacity duration-300">
+            <p id="message-text"></p>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const authPage = document.getElementById('auth-page');
+            const mainContent = document.getElementById('main-content');
+            const bottomNav = document.getElementById('bottom-nav');
+            const loginTab = document.getElementById('login-tab');
+            const registerTab = document.getElementById('register-tab');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            const navHome = document.getElementById('nav-home');
+            const navMyProducts = document.getElementById('nav-my-products');
+            const navProfile = document.getElementById('nav-profile');
+
+            const dashboardSection = document.getElementById('dashboard-section');
+            const investmentPlansSection = document.getElementById('investment-plans-section');
+            const myProductsSection = document.getElementById('my-products-section');
+            const profileSection = document.getElementById('profile-section');
+
+            const rechargeBtn = document.getElementById('recharge-btn');
+            const withdrawBtn = document.getElementById('withdraw-btn');
+            const checkinBtn = document.getElementById('checkin-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            const rechargeModal = document.getElementById('recharge-modal');
+            const withdrawModal = document.getElementById('withdraw-modal');
+            const cancelRecharge = document.getElementById('cancel-recharge');
+            const confirmRecharge = document.getElementById('confirm-recharge');
+            const cancelWithdraw = document.getElementById('cancel-withdraw');
+            const confirmWithdraw = document.getElementById('confirm-withdraw');
+
+            const messageBox = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
+
+            const walletBalanceSpan = document.getElementById('wallet-balance');
+            const profileNameP = document.getElementById('profile-name');
+            const profileEmailP = document.getElementById('profile-email');
+            const plansContainer = document.getElementById('plans-container');
+            const myInvestmentsContainer = document.getElementById('my-investments-container');
+            const loadingPlansMessage = document.getElementById('loading-plans-message');
+            const loadingMyInvestmentsMessage = document.getElementById('loading-my-investments-message');
+
+
+            // Base URL for your PHP API files (adjust if deployed to a subfolder)
+            const API_BASE_URL = ''; // e.g., 'http://localhost/investment_app/' or 'https://yourdomain.com/'
+
+            // Function to show messages
+            function showMessage(message, type = 'info') {
+                messageText.textContent = message;
+                messageBox.className = 'fixed bottom-20 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-50 transition-opacity duration-300 opacity-100';
+                messageBox.classList.remove('bg-green-600', 'bg-red-600', 'bg-gray-800'); // Reset background
+                if (type === 'success') {
+                    messageBox.classList.add('bg-green-600');
+                } else if (type === 'error') {
+                    messageBox.classList.add('bg-red-600');
+                } else {
+                    messageBox.classList.add('bg-gray-800');
+                }
+                messageBox.classList.remove('hidden');
+                setTimeout(() => {
+                    messageBox.classList.add('opacity-0');
+                    messageBox.addEventListener('transitionend', () => {
+                        messageBox.classList.add('hidden');
+                        messageBox.className = 'fixed bottom-20 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-50 hidden transition-opacity duration-300'; // Reset classes
+                    }, { once: true });
+                }, 3000);
+            }
+
+            // Function to update user UI elements
+            function updateUserDataUI(userData) {
+                if (userData) {
+                    walletBalanceSpan.textContent = parseFloat(userData.wallet_balance).toFixed(2);
+                    profileNameP.textContent = userData.name || userData.full_name || 'N/A';
+                    profileEmailP.textContent = userData.email || 'N/A';
+                } else {
+                    walletBalanceSpan.textContent = '0.00';
+                    profileNameP.textContent = 'Guest';
+                    profileEmailP.textContent = 'N/A';
+                }
+            }
+
+            // Function to render investment plans
+            function renderInvestmentPlans(plans) {
+                plansContainer.innerHTML = ''; // Clear previous plans
+                loadingPlansMessage.classList.add('hidden'); // Hide loading message
+                if (plans && plans.length > 0) {
+                    plans.forEach(plan => {
+                        const planCard = `
+                            <div class="bg-white p-5 rounded-lg shadow-md border border-gray-200">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">${plan.plan_name}</h3>
+                                <p class="text-gray-600 mb-1">Price: <span class="font-bold text-green-600">₦${parseFloat(plan.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
+                                <p class="text-gray-600 mb-1">Duration: <span class="font-bold">${plan.duration_days} Days</span></p>
+                                <p class="text-gray-600 mb-1">Daily Profit: <span class="font-bold text-blue-600">₦${parseFloat(plan.daily_profit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
+                                <p class="text-gray-600 mb-4">Total ROI: <span class="font-bold text-purple-600">₦${parseFloat(plan.total_roi).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
+                                <button class="buy-plan-btn w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 text-lg font-medium" data-plan-id="${plan.id}">Buy Plan</button>
+                            </div>
+                        `;
+                        plansContainer.insertAdjacentHTML('beforeend', planCard);
+                    });
+                    // Add event listeners to newly rendered buttons
+                    document.querySelectorAll('.buy-plan-btn').forEach(button => {
+                        button.addEventListener('click', handleBuyPlan);
+                    });
+                } else {
+                    plansContainer.innerHTML = '<p class="text-gray-500 text-center">No investment plans available at the moment.</p>';
+                }
+            }
+
+            // Function to render user's investments
+            function renderMyInvestments(investments) {
+                myInvestmentsContainer.innerHTML = ''; // Clear previous investments
+                loadingMyInvestmentsMessage.classList.add('hidden'); // Hide loading message
+                if (investments && investments.length > 0) {
+                    investments.forEach(inv => {
+                        const investmentCard = `
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                <h4 class="font-semibold text-gray-800">${inv.plan_name}</h4>
+                                <p class="text-sm text-gray-600">Invested: ₦${parseFloat(inv.purchase_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                <p class="text-sm text-gray-600">Daily Profit: ₦${parseFloat(inv.daily_profit_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                <p class="text-sm text-gray-600">Days Remaining: ${inv.days_remaining}</p>
+                                <p class="text-sm text-gray-600">Profit Earned: ₦${parseFloat(inv.total_profit_earned).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                <p class="text-sm ${inv.status === 'active' ? 'text-green-600' : 'text-red-600'} font-medium">Status: ${inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}</p>
+                            </div>
+                        `;
+                        myInvestmentsContainer.insertAdjacentHTML('beforeend', investmentCard);
+                    });
+                } else {
+                    myInvestmentsContainer.innerHTML = '<p class="text-gray-500 text-center">You have no active investments yet.</p>';
+                }
+            }
+
+            // --- API Calls ---
+
+            async function checkSessionAndRender() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}auth.php?action=check_session`);
+                    const result = await response.json();
+
+                    if (result.success && result.is_logged_in) {
+                        if (result.is_admin) {
+                            // Redirect or show admin panel if needed
+                            showMessage('Admin logged in. (No admin panel UI implemented yet)', 'info');
+                            // For now, just log out admin to prevent confusion with user UI
+                            await fetch(`${API_BASE_URL}auth.php?action=logout`);
+                            renderApp(false);
+                            return;
+                        }
+                        renderApp(true);
+                        updateUserDataUI(result.user);
+                        fetchInvestmentPlans(); // Load plans on dashboard
+                    } else {
+                        renderApp(false);
+                    }
+                } catch (error) {
+                    console.error('Error checking session:', error);
+                    showMessage('Could not connect to server. Please try again.', 'error');
+                    renderApp(false);
+                }
+            }
+
+            async function handleAuth(event, action) {
+                event.preventDefault();
+                let formData;
+                let endpoint;
+
+                if (action === 'register') {
+                    const password = document.getElementById('register-password').value;
+                    const confirmPassword = document.getElementById('register-confirm-password').value;
+                    if (password !== confirmPassword) {
+                        showMessage('Passwords do not match!', 'error');
+                        return;
+                    }
+                    formData = {
+                        name: document.getElementById('register-name').value,
+                        email: document.getElementById('register-email').value,
+                        password: password,
+                        confirm_password: confirmPassword
+                    };
+                    endpoint = `${API_BASE_URL}auth.php?action=register`;
+                } else if (action === 'login') {
+                    formData = {
+                        email: document.getElementById('login-email').value,
+                        password: document.getElementById('login-password').value
+                    };
+                    endpoint = `${API_BASE_URL}auth.php?action=login`;
+                }
+
+                showMessage('Processing...', 'info');
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                    const result = await response.json();
+
+                    showMessage(result.message, result.success ? 'success' : 'error');
+
+                    if (result.success && action === 'login') {
+                        renderApp(true);
+                        updateUserDataUI(result.user);
+                        fetchInvestmentPlans();
+                    } else if (result.success && action === 'register') {
+                        loginTab.click(); // Switch to login tab after successful registration
+                        // Clear register form fields
+                        document.getElementById('register-name').value = '';
+                        document.getElementById('register-email').value = '';
+                        document.getElementById('register-password').value = '';
+                        document.getElementById('register-confirm-password').value = '';
+                    }
+                } catch (error) {
+                    console.error(`Error during ${action}:`, error);
+                    showMessage('An error occurred. Please try again.', 'error');
+                }
+            }
+
+            async function fetchUserData() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}user_api.php?action=get_user_data`);
+                    const result = await response.json();
+                    if (result.success) {
+                        updateUserDataUI(result.user);
+                    } else {
+                        showMessage(result.message, 'error');
+                        // If session expired or unauthorized, force logout
+                        if (result.message.includes('Unauthorized')) {
+                            await handleLogout();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    showMessage('Failed to load user data.', 'error');
+                }
+            }
+
+            async function fetchInvestmentPlans() {
+                plansContainer.innerHTML = ''; // Clear existing plans
+                loadingPlansMessage.classList.remove('hidden'); // Show loading message
+                try {
+                    const response = await fetch(`${API_BASE_URL}user_api.php?action=get_investment_plans`);
+                    const result = await response.json();
+                    if (result.success) {
+                        renderInvestmentPlans(result.plans);
+                    } else {
+                        showMessage(result.message, 'error');
+                        plansContainer.innerHTML = `<p class="text-gray-500 text-center">${result.message}</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching investment plans:', error);
+                    showMessage('Failed to load investment plans.', 'error');
+                    plansContainer.innerHTML = '<p class="text-gray-500 text-center">Failed to load investment plans. Please try again later.</p>';
+                } finally {
+                    loadingPlansMessage.classList.add('hidden');
+                }
+            }
+
+            async function fetchMyInvestments() {
+                myInvestmentsContainer.innerHTML = ''; // Clear existing
+                loadingMyInvestmentsMessage.classList.remove('hidden'); // Show loading message
+                try {
+                    const response = await fetch(`${API_BASE_URL}user_api.php?action=get_my_investments`);
+                    const result = await response.json();
+                    if (result.success) {
+                        renderMyInvestments(result.investments);
+                    } else {
+                        showMessage(result.message, 'error');
+                        myInvestmentsContainer.innerHTML = `<p class="text-gray-500 text-center">${result.message}</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching my investments:', error);
+                    showMessage('Failed to load your investments.', 'error');
+                    myInvestmentsContainer.innerHTML = '<p class="text-gray-500 text-center">Failed to load your investments. Please try again later.</p>';
+                } finally {
+                    loadingMyInvestmentsMessage.classList.add('hidden');
+                }
+            }
+
+            async function handleRecharge() {
+                const amount = document.getElementById('recharge-amount').value;
+                if (!amount || parseFloat(amount) <= 0) {
+                    showMessage('Please enter a valid amount.', 'error');
+                    return;
+                }
+
+                showMessage('Submitting recharge request...', 'info');
+                try {
+                    const response = await fetch(`${API_BASE_URL}user_api.php?action=request_recharge`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ amount: parseFloat(amount) })
+                    });
+                    const result = await response.json();
+                    showMessage(result.message, result.success ? 'success' : 'error');
+                    if (result.success) {
+                        rechargeModal.classList.add('hidden');
+                        document.getElementById('recharge-amount').value = '';
+                        fetchUserData(); // Refresh wallet balance
+                    }
+                } catch (error) {
+                    console.error('Error during recharge:', error);
+                    showMessage('An error occurred during recharge. Please try again.', 'error');
+                }
+            }
+
+            async function handleWithdraw() {
+                const amount = document.getElementById('withdraw-amount').value;
+                const bankName = document.getElementById('bank-name').value;
+                const accountNumber = document.getElementById('account-number').value;
+                const accountName = document.getElementById('account-name').value;
+
+                if (!amount || parseFloat(amount) <= 0 || !bankName || !accountNumber || !accountName) {
+                    showMessage('Please fill all withdrawal details correctly.', 'error');
+                    return;
+                }
+
+                showMessage('Submitting withdrawal request...', 'info');
+                try {
+                    const response = await fetch(`${API_BASE_URL}user_api.php?action=request_withdrawal`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            amount: parseFloat(amount),
+                            bank_name: bankName,
+                            account_number: accountNumber,
+                            account_name: accountName
+                        })
+                    });
+                    const result = await response.json();
+                    showMessage(result.message, result.success ? 'success' : 'error');
+                    if (result.success) {
+                        withdrawModal.classList.add('hidden');
+                        document.getElementById('withdraw-amount').value = '';
+                        document.getElementById('bank-name').value = '';
+                        document.getElementById('account-number').value = '';
+                        document.getElementById('account-name').value = '';
+                        fetchUserData(); // Refresh wallet balance
+                    }
+                } catch (error) {
+                    console.error('Error during withdrawal:', error);
+                    showMessage('An error occurred during withdrawal. Please try again.', 'error');
+                }
+            }
+
+            async function handleCheckin() {
+                showMessage('Claiming daily bonus...', 'info');
+                try {
+                    const response = await fetch(`${API_BASE_URL}user_api.php?action=claim_checkin_bonus`);
+                    const result = await response.json();
+                    showMessage(result.message, result.success ? 'success' : 'error');
+                    if (result.success) {
+                        fetchUserData(); // Refresh wallet balance
+                    }
+                } catch (error) {
+                    console.error('Error during check-in:', error);
+                    showMessage('An error occurred during check-in. Please try again.', 'error');
+                }
+            }
+
+            async function handleBuyPlan(event) {
+                const planId = event.target.dataset.planId;
+                if (!planId) {
+                    showMessage('Could not identify plan.', 'error');
+                    return;
+                }
+
+                showMessage('Purchasing plan...', 'info');
+                try {
+                    const response = await fetch(`${API_BASE_URL}user_api.php?action=buy_plan`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ plan_id: parseInt(planId) })
+                    });
+                    const result = await response.json();
+                    showMessage(result.message, result.success ? 'success' : 'error');
+                    if (result.success) {
+                        fetchUserData(); // Refresh wallet balance
+                        fetchMyInvestments(); // Refresh user's investments
+                    }
+                } catch (error) {
+                    console.error('Error buying plan:', error);
+                    showMessage('An error occurred while buying the plan. Please try again.', 'error');
+                }
+            }
+
+            async function handleLogout() {
+                showMessage('Logging out...', 'info');
+                try {
+                    const response = await fetch(`${API_BASE_URL}auth.php?action=logout`);
+                    const result = await response.json();
+                    if (result.success) {
+                        showMessage('Logged out successfully!', 'success');
+                        renderApp(false); // Go back to auth page
+                        updateUserDataUI(null); // Clear UI data
+                    } else {
+                        showMessage(result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error during logout:', error);
+                    showMessage('An error occurred during logout. Please try again.', 'error');
+                }
+            }
+
+            // --- UI Rendering Logic ---
+            function renderApp(loggedIn) {
+                if (loggedIn) {
+                    authPage.classList.add('hidden');
+                    mainContent.classList.remove('hidden');
+                    bottomNav.classList.remove('hidden');
+                    showSection('dashboard'); // Show dashboard by default after login
+                    fetchUserData(); // Fetch user data on login
+                } else {
+                    authPage.classList.remove('hidden');
+                    mainContent.classList.add('hidden');
+                    bottomNav.classList.add('hidden');
+                    // Reset forms on logout
+                    loginForm.reset();
+                    registerForm.reset();
+                    loginTab.click(); // Ensure login tab is active
+                }
+            }
+
+            function showSection(sectionId) {
+                // Hide all sections
+                dashboardSection.classList.add('hidden');
+                investmentPlansSection.classList.add('hidden'); // Plans are part of dashboard view
+                myProductsSection.classList.add('hidden');
+                profileSection.classList.add('hidden');
+
+                // Remove active class from all nav items
+                navHome.classList.remove('active');
+                navMyProducts.classList.remove('active');
+                navProfile.classList.remove('active');
+
+                // Show the selected section and set active nav item
+                if (sectionId === 'dashboard') {
+                    dashboardSection.classList.remove('hidden');
+                    investmentPlansSection.classList.remove('hidden');
+                    navHome.classList.add('active');
+                    fetchInvestmentPlans(); // Reload plans when returning to dashboard
+                } else if (sectionId === 'my-products') {
+                    myProductsSection.classList.remove('hidden');
+                    navMyProducts.classList.add('active');
+                    fetchMyInvestments(); // Load user investments
+                } else if (sectionId === 'profile') {
+                    profileSection.classList.remove('hidden');
+                    navProfile.classList.add('active');
+                    fetchUserData(); // Ensure latest profile data is shown
+                }
+            }
+
+            // --- Event Listeners ---
+            loginTab.addEventListener('click', () => {
+                loginTab.classList.add('bg-blue-500', 'text-white');
+                loginTab.classList.remove('bg-gray-100', 'text-gray-700');
+                registerTab.classList.remove('bg-blue-500', 'text-white');
+                registerTab.classList.add('bg-gray-100', 'text-gray-700');
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            });
+
+            registerTab.addEventListener('click', () => {
+                registerTab.classList.add('bg-blue-500', 'text-white');
+                registerTab.classList.remove('bg-gray-100', 'text-gray-700');
+                loginTab.classList.remove('bg-blue-500', 'text-white');
+                loginTab.classList.add('bg-gray-100', 'text-gray-700');
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            });
+
+            loginForm.addEventListener('submit', (e) => handleAuth(e, 'login'));
+            registerForm.addEventListener('submit', (e) => handleAuth(e, 'register'));
+
+            navHome.addEventListener('click', (e) => { e.preventDefault(); showSection('dashboard'); });
+            navMyProducts.addEventListener('click', (e) => { e.preventDefault(); showSection('my-products'); });
+            navProfile.addEventListener('click', (e) => { e.preventDefault(); showSection('profile'); });
+
+            rechargeBtn.addEventListener('click', () => { rechargeModal.classList.remove('hidden'); });
+            cancelRecharge.addEventListener('click', () => { rechargeModal.classList.add('hidden'); document.getElementById('recharge-amount').value = ''; });
+            confirmRecharge.addEventListener('click', handleRecharge);
+
+            withdrawBtn.addEventListener('click', () => { withdrawModal.classList.remove('hidden'); });
+            cancelWithdraw.addEventListener('click', () => {
+                withdrawModal.classList.add('hidden');
+                document.getElementById('withdraw-amount').value = '';
+                document.getElementById('bank-name').value = '';
+                document.getElementById('account-number').value = '';
+                document.getElementById('account-name').value = '';
+            });
+            confirmWithdraw.addEventListener('click', handleWithdraw);
+
+            checkinBtn.addEventListener('click', handleCheckin);
+            logoutBtn.addEventListener('click', handleLogout);
+
+            // Initial session check when the page loads
+            checkSessionAndRender();
+        });
+    </script>
+</body>
+</html>
